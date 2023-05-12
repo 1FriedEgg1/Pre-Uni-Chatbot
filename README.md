@@ -13,6 +13,9 @@ It doesn't remember more than that though :(
 2. [discord.js v14.11.10](https://old.discordjs.dev/#/)
 
 ## Usage
+Just ping the bot (either reply or direct ping) and then type your message
+
+## Running locally
 The code is commented and all that already.
 But what you want to do is create a .env file in the same folder as the index.js file that contains some necessary variables
 
