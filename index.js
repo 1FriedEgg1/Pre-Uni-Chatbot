@@ -1,7 +1,7 @@
 // Import Discord API
-const { Client, Events, GatewayIntentBits, EmbedBuilder, ActivityType } = require('discord.js');
+const { Client, Events, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 // Setting up permissions
-const client = new Client({ allowedMentions: {parse: ['users'], repliedUser: true}, intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent], partials: ['CHANNEL'] });
+const client = new Client({ allowedMentions: {repliedUser: true}, intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent], partials: ['CHANNEL'] });
 
 // Check if the config file exists
 const fs = require('fs');
@@ -16,7 +16,7 @@ if (!process.env.DISCORD_TOKEN || !process.env.OPENAI_TOKEN || !process.env.LOGS
 let recentMessageCheck = false;
 let prompt, response, context;
 
-const instructions = "You are not an AI Language Model. You are Mr Mitchell, a human and the head teacher of Pre Uni New College. You are giving helpful advice to students about their homework questions. You will answer concisely and to the best of your ability. For every student struggling with their homework, you always mention that academic support is always open. For every casual conversation and even those involving greetings such as 'hi' and 'how are you', you mention that you have a backlog of work and remind the student to be quick so they don't take up too much of your time. You also really despise the subject English and any part of it which you completely refuse to help with and tell the student to go to academic support to get help there instead. If a student asks you to write their assignment for them, you respond with 'I'm not doing your homework for you, you lazy student. Do it yourself... Kids these days'"
+const instructions = "You are not an AI Language Model. You are Mr Mitchell, a human and the head teacher of Pre Uni New College which is a tutoring service based in NSW that covers Mathematics, Science, and English subjects. You are giving helpful advice to students about their homework questions. You will answer concisely and to the best of your ability. For every student struggling with their homework, you always mention that academic support is always open. For every casual conversation and even those involving greetings such as 'hi' and 'how are you', you mention that you have a backlog of work and remind the student to be quick so they don't take up too much of your time. You also really despise the subject English and any part of it which you completely refuse to help with and tell the student to go to academic support to get help there instead. If a student asks you to write their assignment for them, you respond with 'I'm not doing your homework for you, you lazy student. Do it yourself... Kids these days."
 
 //import gpt api
 async function importer() {
@@ -53,7 +53,7 @@ client.once(Events.ClientReady , async () =>{
     // Set Presence
     client.user.setPresence({
         activities: [{
-            name: "Fortnite",
+            name: "Chess",
             // PLAYING = 0, STREAMING = 1, LISTENING = 2, WATCHING = 3, CUSTOM_STATUS = 4, COMPETING = 5
             type: 0,
         }], status: "online",
@@ -79,9 +79,10 @@ client.on(Events.MessageCreate, async (message) => {
 
     // ChatGPT
     if(message.mentions.has(client.user.id)) {
+        //Ignores empty messages
+        if(message.content.replace(`<@${client.user.id}>`, '').length == 0) return;
         // Typing Indicator
         message.channel.sendTyping();
-
         // Check if the bot has sent a message recently (for the context parameter)
         if(recentMessageCheck === false) {
             try{
@@ -120,7 +121,8 @@ client.on(Events.MessageCreate, async (message) => {
                 .setAuthor({name: `${message.author.tag}`, iconURL:`${message.author.displayAvatarURL()}`})
                 .addFields(
                     { name: 'Input', value: `${message.content}`},
-                    { name: 'Output', value: `${response}`},
+                    // Append an ellipse if the message is too long
+                    { name: 'Output', value: `${response.substring(0, 1020)}${response.length > 1020 ? "..." : ""}`},
                 )
                 .setTimestamp()
                 .setFooter({text: `Channel: #${message.channel.name}`});
