@@ -79,7 +79,7 @@ client.on(Events.MessageCreate, async (message) => {
     }
 
     // ChatGPT
-    if(message.mentions.has(client.user.id)) {
+    if(message.mentions.has(client.user.id) && !message.content.includes(`@everyone`) && !message.content.includes(`@here`)) {
         //Ignores empty messages
         if(message.content.replace(`<@${client.user.id}>`, '').length == 0) return;
         // Typing Indicator
