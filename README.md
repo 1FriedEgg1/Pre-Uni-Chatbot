@@ -5,8 +5,6 @@ So, I've created a discord bot for the server using node.js.
 It uses the GPT3.5-Turbo API with some special instructions to act like Mr Mitchell (for the funnies).
 Now, this does cost money to run since every interaction with the API costs money.
 So be careful when you're using it.
-The bot also remembers the last message it sent, which can be weird when multiple people are using it at the same time.
-It doesn't remember more than that though :(
 
 ## Dependencies
 1. [chatgpt v.5.2.4](https://www.npmjs.com/package/chatgpt)
