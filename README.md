@@ -3,6 +3,7 @@
 ## About
 So, I've created a discord bot for the server using node.js.
 It uses the GPT3.5-Turbo API with some special instructions to act like Mr Mitchell (for the funnies).
+It also has memory (but it's not optimised to run for a long time)
 Now, this does cost money to run since every interaction with the API costs money.
 So be careful when you're using it.
 
