@@ -81,6 +81,8 @@ client.on(Events.MessageCreate, async (message) => {
         if(message.content.replace(`<@${client.user.id}>`, '').length == 0) return;
         // Typing Indicator
         message.channel.sendTyping();
+        // Circular bufferring of the array of message history
+        if (conversationHistory.length > 20) conversationHistory.shift();
         // Check if the bot has sent a message recently (for the context parameter)
         conversationHistory.push({ role: "user", content: message.content.replace(`<@${client.user.id}>`, '') });
         if(recentMessageCheck === false) {
