@@ -90,7 +90,7 @@ client.on(Events.MessageCreate, async (message) => {
             // If you ping the bot it removes the ping part from the message getting sent to the AI
             try {
                 prompt = await openai.createChatCompletion({
-                    model: "gpt-3.5-turbo",
+                    model: "gpt-3.5-turbo-0613",
                     messages: [{role: "system", content: instructions}, ...conversationHistory],
                 });
             } catch (err) {

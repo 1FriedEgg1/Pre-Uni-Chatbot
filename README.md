@@ -8,7 +8,7 @@ Now, this does cost money to run since every interaction with the API costs mone
 So be careful when you're using it.
 
 ## Dependencies
-1. [chatgpt v.5.2.4](https://www.npmjs.com/package/chatgpt)
+1. [openai v.3.3.0](https://www.npmjs.com/package/openai)
 2. [discord.js v14.11.10](https://old.discordjs.dev/#/)
 
 ## Usage
