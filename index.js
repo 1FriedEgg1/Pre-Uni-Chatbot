@@ -29,6 +29,9 @@ const openai = new OpenAI({apiKey: process.env.OPENAI_TOKEN});
 
 // Startup code
 client.once(Events.ClientReady , async () => {
+    gitrevision = require('child_process')
+  .execSync('git rev-parse HEAD')
+  .toString().trim().slice(0, 7);
     // Console Logs
     console.log(`Ready! Logged in as ${client.user.tag}\n`);
     console.log(`Connected to guild ${client.guilds.cache.map((guild) => `${guild.name} (${guild.id})`).join(', ')}\n`);
@@ -40,6 +43,7 @@ client.once(Events.ClientReady , async () => {
     .setTitle(`Bot Online`)
     .setColor('Green')
     .setDescription(`Connected to guild **${client.guilds.cache.map((guild) => `${guild.name} (${guild.id})`).join(', ')}**`)
+    .setFooter({text: `Git Revision: ${gitrevision}`})
     .setTimestamp();
     logChannel.send({ embeds: [logEmbed] });
     } catch (err) {
