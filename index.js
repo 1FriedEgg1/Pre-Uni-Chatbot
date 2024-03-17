@@ -3,6 +3,8 @@ const { Client, Events, GatewayIntentBits, EmbedBuilder } = require('discord.js'
 const fs = require('fs');
 const dotenv = require('dotenv');
 const OpenAI = require('openai');
+const mathjax = require("mathjax-node");
+const sharp = require("sharp");
 
 // Check if the config file exists
 if (!fs.existsSync('./.env')) {
@@ -81,6 +83,69 @@ client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot || message.channel.type === 'DM') {
         return; // Ignore messages from bots and DMs
     }
+      // Check if the message contains the delimiters $...$
+  const match = message.content.match(/\$(.*?)\$/s);
+  if (match) {
+    // Extract the equation from the user's message
+    const equation = match[1].replace(/ /g, "\\ ").trim();
+
+    // Check if the equation is empty
+    if (!equation) {
+      message.reply("Please provide a non-empty equation.");
+      return;
+    }
+
+    if (equation == "help") {
+        message.reply(`To use the LaTeX feature, type your equation between two dollar signs. For example, to render the equation x^2, type $x^2$.\n Refer to the LaTeX documentation for more information on syntax.`);
+        return;
+      }
+
+    const maxEquationLength = 1000; // Limit the equation length to prevent abuse
+    if (equation.length > maxEquationLength) {
+      message.reply(`Equation is too long. It should be less than ${maxEquationLength} characters.`);
+      return;
+    }
+
+    // Render the equation in LaTeX
+    mathjax.typeset(
+      {
+        math: "\\begin{align*}" + equation + "\\end{align*}",
+        format: "TeX",
+        svg: true,
+        ex: 22,
+      },
+      async (data) => {
+        if (data.errors) {
+          message.reply(
+            `An error occurred while rendering the equation: \`${data.errors}\``
+          );
+          return;
+        }
+
+        // Resize the rendered equation PNG dynamically
+        try {
+          const resizedPngBuffer = await sharp(Buffer.from(data.svg), {density: 300})
+            .png()
+            .toBuffer();
+
+          // Save the resized PNG as a temporary file
+          const fileName = `equation_${Date.now()}.png`;
+          fs.writeFileSync(fileName, resizedPngBuffer);
+
+          // Reply back to the user with the resized PNG
+          await message.reply({
+            files: [fileName],
+          });
+
+          // Delete the temporary PNG file
+          fs.unlinkSync(fileName);
+        } catch (error) {
+          console.error("Error occurred while resizing PNG:", error);
+          message.reply("An error occurred while resizing the equation PNG."); // Notify the user
+        }
+      }
+    );
+  }
 
     if (message.content === `!restart` && message.author.id === process.env.OWNER_ID) {
         message.reply(`Restarting...`);
