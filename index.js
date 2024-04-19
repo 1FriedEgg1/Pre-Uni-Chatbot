@@ -83,8 +83,8 @@ client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot || message.channel.type === 'DM') {
         return; // Ignore messages from bots and DMs
     }
-      // Check if the message contains the delimiters $...$
-  const match = message.content.match(/\$(.*?)\$/s);
+      // Check if the message contains the delimiters $$...$$
+  const match = message.content.match(/\$\$(.*?)\$\$/s);
   if (match) {
     // Extract the equation from the user's message
     const equation = match[1].replace(/ /g, "\\ ").trim();
@@ -96,7 +96,7 @@ client.on(Events.MessageCreate, async (message) => {
     }
 
     if (equation == "help") {
-        message.reply(`To use the LaTeX feature, type your equation between two dollar signs. For example, to render the equation x^2, type $x^2$.\n Refer to the LaTeX documentation for more information on syntax.`);
+        message.reply(`To use the LaTeX feature, type your equation between two double dollar signs. For example, to render the equation x^2, type $$x^2$$.\n Refer to the LaTeX documentation for more information on syntax.`);
         return;
       }
 
