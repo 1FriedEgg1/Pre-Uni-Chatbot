@@ -1,10 +1,11 @@
 {
   "name": "mr_mitchell_bot",
   "version": "1.0.0",
-  "description": "A GPT3 chatbot for the Pre-Uni Discord Server",
+  "description": "A GPT-4 chatbot for the Pre-Uni Discord Server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
   },
   "keywords": [],
   "author": "egg",
@@ -12,6 +13,7 @@
   "dependencies": {
     "discord.js": "^14.11.0",
     "dotenv": "^16.0.3",
+    "katex": "^0.16.10",
     "mathjax-node": "^2.1.1",
     "openai": "^4.2.0",
     "sharp": "^0.33.2"
